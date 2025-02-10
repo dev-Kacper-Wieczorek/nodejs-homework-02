@@ -1,3 +1,6 @@
+// 1️⃣ Załaduj zmienne środowiskowe z pliku .env
+require('dotenv').config();
+
 const express = require('express');
 const logger = require('morgan');
 const cors = require('cors');
@@ -7,17 +10,16 @@ const contactsRouter = require('./routes/api/contacts');
 
 const app = express();
 
-// 1️⃣ Połączenie z MongoDB
-const DB_HOST = 'mongodb+srv://admin:Kacper2024@contactscluster.ur1ad.mongodb.net/?retryWrites=true&w=majority&appName=ContactsCluster';
-
+// 2️⃣ Połączenie z MongoDB
+const DB_HOST = process.env.MONGO_URI;
 
 mongoose.connect(DB_HOST)
   .then(() => {
     console.log('✅ Database connection successful');
 
-    // 2️⃣ Uruchomienie serwera po połączeniu z MongoDB
+    // 3️⃣ Uruchomienie serwera po połączeniu z MongoDB
     app.listen(3000, () => {
-      console.log('🚀 Server running on http://localhost:3000');
+      console.log('🚀 Server running on http://localhost:3001');
     });
   })
   .catch(error => {
@@ -25,16 +27,16 @@ mongoose.connect(DB_HOST)
     process.exit(1);
   });
 
-// 3️⃣ Middleware
+// 4️⃣ Middleware
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
 app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
 
-// 4️⃣ Routes
+// 5️⃣ Routes
 app.use('/api/contacts', contactsRouter);
 
-// 5️⃣ Obsługa błędów
+// 6️⃣ Obsługa błędów
 app.use((req, res) => {
   res.status(404).json({ message: 'Not found' });
 });
