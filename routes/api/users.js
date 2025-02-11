@@ -1,7 +1,6 @@
 const express = require('express');
 const authenticate = require('../../middlewares/auth');
 const upload = require('../../middlewares/upload');
-
 const {
   signup,
   login,
