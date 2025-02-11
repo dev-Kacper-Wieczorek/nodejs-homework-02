@@ -1,9 +1,21 @@
 const express = require('express');
-const upload = require('../../middlewares/upload'); // Import upload middleware
-const { updateAvatar } = require('../../controllers/users'); // Funkcja kontrolera
+const authenticate = require('../../middlewares/auth');
+const upload = require('../../middlewares/upload');
+
+const {
+  signup,
+  login,
+  logout,
+  getCurrentUser,
+  updateAvatar,
+} = require('../../controllers/users');
 
 const router = express.Router();
 
-router.patch('/avatars', upload.single('avatar'), updateAvatar);
+router.post('/signup', signup);
+router.post('/login', login);
+router.get('/logout', authenticate, logout);
+router.get('/current', authenticate, getCurrentUser);
+router.patch('/avatars', authenticate, upload.single('avatar'), updateAvatar);
 
 module.exports = router;
